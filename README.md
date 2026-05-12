@@ -283,14 +283,6 @@ Evidência:
 ./scripts/cleanup.sh
 ```
 
-## Evidências sugeridas
-
-Salve capturas de tela em `assets/screenshots/` para reforçar o valor de portfólio do projeto e facilitar avaliação técnica por recrutadores.
-
-Checklist detalhado de captura:
-
-- `docs/evidencias.md`
-
 ## Aprendizados principais
 
 - Entendimento prático das fases de Pods e estados de Containers.
