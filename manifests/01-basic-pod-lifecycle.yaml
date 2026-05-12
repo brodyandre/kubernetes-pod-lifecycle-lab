@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: basic-nginx-pod
+  namespace: pod-lifecycle-lab
+  labels:
+    app: nginx
+    scenario: basic-pod-lifecycle
+    lab.kubernetes.io/topic: pod-states
+spec:
+  # Este Pod normalmente passa por Pending -> Running.
+  # Em caso de erro (ex.: imagem inexistente), pode ir para estados de falha.
+  # Com restartPolicy Always, um Pod de nginx tende a permanecer em Running.
+  # Estados Succeeded/Failed costumam aparecer em Pods de execucao finita (batch).
+  restartPolicy: Always
+  containers:
+    - name: nginx
+      image: nginx:1.27-alpine
+      imagePullPolicy: IfNotPresent
+      ports:
+        - name: http
+          containerPort: 80

@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: init-failure-pod
+  namespace: pod-lifecycle-lab
+  labels:
+    app: nginx
+    scenario: init-container-failure
+spec:
+  restartPolicy: Always
+  # Este manifesto e propositalmente incorreto para troubleshooting.
+  # O initContainer falha continuamente, deixando o Pod em Init:CrashLoopBackOff.
+  initContainers:
+    - name: init-failing-step
+      image: busybox:1.36
+      command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Falha proposital para estudo de troubleshooting."
+          echo "Simulando dependencia ausente..."
+          exit 1
+  containers:
+    - name: nginx
+      image: nginx:1.27-alpine
+      ports:
+        - name: http
+          containerPort: 80

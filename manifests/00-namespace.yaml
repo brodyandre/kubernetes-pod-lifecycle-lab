@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pod-lifecycle-lab
+  # Labels utilitarios para organizacao e filtros com kubectl.
+  labels:
+    app.kubernetes.io/name: kubernetes-pod-lifecycle-lab
+    app.kubernetes.io/part-of: portfolio-devops-jr

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lifecycle-hooks-demo
+  namespace: pod-lifecycle-lab
+  labels:
+    app: pod-lifecycle-app
+    scenario: poststart-prestop-hooks
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pod-lifecycle-app
+      scenario: poststart-prestop-hooks
+  template:
+    metadata:
+      labels:
+        app: pod-lifecycle-app
+        scenario: poststart-prestop-hooks
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: app
+          image: brodyandre/pod-lifecycle-app:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          lifecycle:
+            # postStart roda logo apos a criacao do container.
+            # E util para bootstrap leve e logging de inicializacao.
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - echo "postStart executado em $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> /tmp/poststart.log
+            # preStop roda antes do encerramento do container.
+            # Aqui simulamos limpeza com sleep antes do processo terminar.
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - echo "preStop acionado; aguardando drenagem..." && sleep 8

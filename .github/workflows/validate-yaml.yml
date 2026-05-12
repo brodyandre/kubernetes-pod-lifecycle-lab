@@ -1,0 +1,30 @@
+name: Validate Kubernetes YAML
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  yamllint:
+    name: Lint YAML Files
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install yamllint
+        run: python -m pip install --upgrade pip yamllint
+
+      - name: Validate all .yml and .yaml files
+        run: |
+          git ls-files "*.yml" "*.yaml" | xargs -r yamllint -c .yamllint
