@@ -40,7 +40,7 @@ Pasta recomendada para salvar os prints:
 
 ### 6) Logs da aplicação recebendo SIGTERM
 
-- O que capturar: logs do deployment mostrando recebimento de `SIGTERM` e início de shutdown.
+- O que capturar: logs contínuos da aplicação durante o teste de encerramento (requisições/healthchecks) e, preferencialmente, linhas de `SIGTERM` quando disponíveis.
 - Nome sugerido:
   - `assets/screenshots/06-sigterm-logs.png`
 
@@ -58,7 +58,7 @@ Pasta recomendada para salvar os prints:
 
 ### 9) Execução do preStop
 
-- O que capturar: logs/eventos mostrando `preStop` antes do encerramento do container.
+- O que capturar: acionamento do cenário de `preStop` (deleção do pod) e, preferencialmente, eventos de término do container.
 - Nome sugerido:
   - `assets/screenshots/09-prestop-execution.png`
 
@@ -70,7 +70,7 @@ Pasta recomendada para salvar os prints:
 
 ### 11) Init Container falhando propositalmente
 
-- O que capturar: `Init:CrashLoopBackOff` e detalhes em `describe` do `init-failure-pod`.
+- O que capturar: detalhes do `describe` mostrando erro/reinício do init container e, preferencialmente, status `Init:CrashLoopBackOff` no `kubectl get pods`.
 - Nome sugerido:
   - `assets/screenshots/11-init-failure-crashloop.png`
 

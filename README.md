@@ -235,8 +235,10 @@ kubectl get events -n pod-lifecycle-lab --sort-by=.lastTimestamp
 
 Evidências:
 
-![Logs de SIGTERM](assets/screenshots/06-sigterm-logs.png)
+![Logs da aplicação durante o teste de graceful shutdown](assets/screenshots/06-sigterm-logs.png)
 ![Eventos de encerramento](assets/screenshots/07-pod-termination-events.png)
+
+Observação: o print de logs registra o tráfego e healthchecks contínuos durante o teste. A evidência explícita de término do Pod está no print de eventos.
 
 ### 8.1) Verificar hooks postStart e preStop
 
@@ -244,12 +246,13 @@ Evidências:
 POD_HOOK=$(kubectl get pod -n pod-lifecycle-lab -l scenario=poststart-prestop-hooks -o jsonpath='{.items[0].metadata.name}')
 kubectl exec -n pod-lifecycle-lab "$POD_HOOK" -- cat /tmp/poststart.log
 kubectl delete pod -n pod-lifecycle-lab "$POD_HOOK"
+kubectl get events -n pod-lifecycle-lab --sort-by=.lastTimestamp
 ```
 
 Evidências:
 
 ![Hook postStart](assets/screenshots/08-poststart-execution.png)
-![Hook preStop](assets/screenshots/09-prestop-execution.png)
+![Acionamento do preStop por deleção do Pod](assets/screenshots/09-prestop-execution.png)
 
 ### 9) Testar initContainer com falha
 
@@ -261,7 +264,7 @@ kubectl describe pod -n pod-lifecycle-lab init-failure-pod
 
 Evidência:
 
-![Init failure](assets/screenshots/11-init-failure-crashloop.png)
+![Init failure (describe do pod com falha no init container)](assets/screenshots/11-init-failure-crashloop.png)
 
 ### 10) Corrigir initContainer
 
