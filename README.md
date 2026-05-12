@@ -238,6 +238,49 @@ Checklist detalhado:
 
 - `docs/evidencias.md`
 
+## Galeria de Evidências
+
+Após salvar as imagens em `assets/screenshots/`, elas aparecerão automaticamente no GitHub README:
+
+### 1) Cluster k3d criado
+![Cluster k3d criado](assets/screenshots/01-k3d-cluster-created.png)
+
+### 2) kubectl get nodes
+![kubectl get nodes](assets/screenshots/02-kubectl-get-nodes.png)
+
+### 3) Build da imagem Docker
+![Build da imagem Docker](assets/screenshots/03-docker-image-build.png)
+
+### 4) Import da imagem no k3d
+![Import da imagem no k3d](assets/screenshots/04-k3d-image-import.png)
+
+### 5) Pods no namespace
+![Pods no namespace](assets/screenshots/05-pods-running-namespace.png)
+
+### 6) Logs de SIGTERM
+![Logs de SIGTERM](assets/screenshots/06-sigterm-logs.png)
+
+### 7) Eventos de encerramento
+![Eventos de encerramento](assets/screenshots/07-pod-termination-events.png)
+
+### 8) Hook postStart
+![Hook postStart](assets/screenshots/08-poststart-execution.png)
+
+### 9) Hook preStop
+![Hook preStop](assets/screenshots/09-prestop-execution.png)
+
+### 10) Init success
+![Init success](assets/screenshots/10-init-success.png)
+
+### 11) Init failure
+![Init failure](assets/screenshots/11-init-failure-crashloop.png)
+
+### 12) Init fixed
+![Init fixed](assets/screenshots/12-init-fixed.png)
+
+### 13) GitHub Actions YAML validation
+![GitHub Actions YAML validation](assets/screenshots/13-github-actions-yamllint-success.png)
+
 ## Aprendizados principais
 
 - Entendimento prático das fases de Pods e estados de Containers.
