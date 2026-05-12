@@ -64,6 +64,10 @@ O projeto possui validação automática de arquivos `.yaml` e `.yml` via GitHub
 
 A pipeline executa `yamllint` em `push` e `pull_request` para a branch `main`, ajudando a manter manifests e workflows consistentes.
 
+Evidência da pipeline em sucesso:
+
+![GitHub Actions YAML validation](assets/screenshots/13-github-actions-yamllint-success.png)
+
 ## Arquitetura do laboratório
 
 ```text
@@ -155,6 +159,16 @@ cd kubernetes-pod-lifecycle-lab
 k3d cluster create meucluster --servers 3 --agents 3
 ```
 
+```bash
+k3d cluster list
+kubectl get nodes
+```
+
+Evidências:
+
+![Cluster k3d criado](assets/screenshots/01-k3d-cluster-created.png)
+![kubectl get nodes](assets/screenshots/02-kubectl-get-nodes.png)
+
 ### 3) Validar ambiente
 
 ```bash
@@ -168,11 +182,19 @@ chmod +x scripts/*.sh
 ./scripts/build-image.sh
 ```
 
+Evidência:
+
+![Build da imagem Docker](assets/screenshots/03-docker-image-build.png)
+
 ### 5) Importar imagem no k3d
 
 ```bash
 ./scripts/import-image-k3d.sh
 ```
+
+Evidência:
+
+![Import da imagem no k3d](assets/screenshots/04-k3d-image-import.png)
 
 ### 6) Aplicar manifests
 
@@ -186,12 +208,48 @@ chmod +x scripts/*.sh
 kubectl get pods -n pod-lifecycle-lab
 ```
 
+Evidência:
+
+![Pods no namespace](assets/screenshots/05-pods-running-namespace.png)
+
+### 7.1) Verificar Init Container com sucesso
+
+```bash
+kubectl describe pod -n pod-lifecycle-lab init-success-pod
+```
+
+Evidência:
+
+![Init success](assets/screenshots/10-init-success.png)
+
 ### 8) Testar graceful shutdown
 
 ```bash
 kubectl logs -n pod-lifecycle-lab -l app=pod-lifecycle-app -f
 kubectl delete pod -n pod-lifecycle-lab -l app=pod-lifecycle-app
 ```
+
+```bash
+kubectl get events -n pod-lifecycle-lab --sort-by=.lastTimestamp
+```
+
+Evidências:
+
+![Logs de SIGTERM](assets/screenshots/06-sigterm-logs.png)
+![Eventos de encerramento](assets/screenshots/07-pod-termination-events.png)
+
+### 8.1) Verificar hooks postStart e preStop
+
+```bash
+POD_HOOK=$(kubectl get pod -n pod-lifecycle-lab -l scenario=poststart-prestop-hooks -o jsonpath='{.items[0].metadata.name}')
+kubectl exec -n pod-lifecycle-lab "$POD_HOOK" -- cat /tmp/poststart.log
+kubectl delete pod -n pod-lifecycle-lab "$POD_HOOK"
+```
+
+Evidências:
+
+![Hook postStart](assets/screenshots/08-poststart-execution.png)
+![Hook preStop](assets/screenshots/09-prestop-execution.png)
 
 ### 9) Testar initContainer com falha
 
@@ -201,12 +259,20 @@ kubectl get pods -n pod-lifecycle-lab
 kubectl describe pod -n pod-lifecycle-lab init-failure-pod
 ```
 
+Evidência:
+
+![Init failure](assets/screenshots/11-init-failure-crashloop.png)
+
 ### 10) Corrigir initContainer
 
 ```bash
 kubectl apply -f manifests/06-init-container-fixed.yaml
 kubectl get pods -n pod-lifecycle-lab
 ```
+
+Evidência:
+
+![Init fixed](assets/screenshots/12-init-fixed.png)
 
 ### 11) Limpar ambiente
 
@@ -218,68 +284,9 @@ kubectl get pods -n pod-lifecycle-lab
 
 Salve capturas de tela em `assets/screenshots/` para reforçar o valor de portfólio do projeto e facilitar avaliação técnica por recrutadores.
 
-Sugestões de evidências:
-
-- `01-k3d-cluster-created.png`
-- `02-kubectl-get-nodes.png`
-- `03-docker-image-build.png`
-- `04-k3d-image-import.png`
-- `05-pods-running-namespace.png`
-- `06-sigterm-logs.png`
-- `07-pod-termination-events.png`
-- `08-poststart-execution.png`
-- `09-prestop-execution.png`
-- `10-init-success.png`
-- `11-init-failure-crashloop.png`
-- `12-init-fixed.png`
-- `13-github-actions-yamllint-success.png`
-
-Checklist detalhado:
+Checklist detalhado de captura:
 
 - `docs/evidencias.md`
-
-## Galeria de Evidências
-
-Após salvar as imagens em `assets/screenshots/`, elas aparecerão automaticamente no GitHub README:
-
-### 1) Cluster k3d criado
-![Cluster k3d criado](assets/screenshots/01-k3d-cluster-created.png)
-
-### 2) kubectl get nodes
-![kubectl get nodes](assets/screenshots/02-kubectl-get-nodes.png)
-
-### 3) Build da imagem Docker
-![Build da imagem Docker](assets/screenshots/03-docker-image-build.png)
-
-### 4) Import da imagem no k3d
-![Import da imagem no k3d](assets/screenshots/04-k3d-image-import.png)
-
-### 5) Pods no namespace
-![Pods no namespace](assets/screenshots/05-pods-running-namespace.png)
-
-### 6) Logs de SIGTERM
-![Logs de SIGTERM](assets/screenshots/06-sigterm-logs.png)
-
-### 7) Eventos de encerramento
-![Eventos de encerramento](assets/screenshots/07-pod-termination-events.png)
-
-### 8) Hook postStart
-![Hook postStart](assets/screenshots/08-poststart-execution.png)
-
-### 9) Hook preStop
-![Hook preStop](assets/screenshots/09-prestop-execution.png)
-
-### 10) Init success
-![Init success](assets/screenshots/10-init-success.png)
-
-### 11) Init failure
-![Init failure](assets/screenshots/11-init-failure-crashloop.png)
-
-### 12) Init fixed
-![Init fixed](assets/screenshots/12-init-fixed.png)
-
-### 13) GitHub Actions YAML validation
-![GitHub Actions YAML validation](assets/screenshots/13-github-actions-yamllint-success.png)
 
 ## Aprendizados principais
 
